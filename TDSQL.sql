@@ -1,4 +1,4 @@
-REQ-1:-- Create tble for feed1
+REQ-1:-- Create table for feed1
 CREATE TABLE Feed1 (
     col1 INT,
     col2 VARCHAR(50),
@@ -88,6 +88,7 @@ FROM generate_series(1,20) AS n;
 
 SELECT * FROM FEED3
 
+REQ-2:Automate the Req 1 input file generation using SQL scripts and the parameter will be "Feed name" & Number of Rows to populate Data
 CREATE OR REPLACE PROCEDURE populate_feed(feed_name TEXT, num_rows INT)
 LANGUAGE plpgsql
 AS $$
@@ -166,6 +167,7 @@ CALL populate_feed('Feed2', 15);
 CALL populate_feed('Feed3', 20);
 
 
+REQ-3:WRITE SQL SCRIPT TO IDENTIFY DUPLICATE IN EACH OF THE TABLE FEED-1,2,3
 DROP TABLE IF EXISTS duplicates;
 CREATE TABLE duplicates AS
 (
@@ -217,7 +219,8 @@ select count(*) from feed1
 select count(*) from feed2
 select count(*) from feed3
 
-REQ-5-- Feed1 (10 columns)
+REQ-5:CREATE A SCRIPT TO REPLACE ALL THE DUPLICATES WITH UNIQUE ROWS AND UPDATE BACK TO RESPECTIVE FIELDS
+-- Feed1 (10 columns)
 DROP TABLE IF EXISTS temp_feed1_with_pk;
 CREATE TEMP TABLE temp_feed1_with_pk AS
 SELECT
@@ -385,7 +388,7 @@ SELECT col1, col2, col3, col4, col5, col6, col7, col8, col9, col10,
        col11, col12, col13, col14, col15, col16, col17, col18, col19, col20
 FROM temp_feed3_with_pk;
 
-req-6:
+REQ-6:EXECUTE THE DUPLICATES SCRIPT AND CHECK THE OUTPUT IS ZERO
 -- Check duplicates in Feed1
 SELECT COUNT(*) AS duplicate_count
 FROM (
@@ -421,7 +424,7 @@ FROM (
     HAVING COUNT(*) > 1
 ) AS duplicates;
 
-REQ-7
+REQ-7:CREATE SQLSCRIPT TO COMPARE DATA FROM FEED-2,3 TO FEED-1 and write in output file on compared results
 -- Feed2 vs Feed1 (first 10 columns)
 CREATE TEMP TABLE compare_feed2 AS
 SELECT 'Feed2' AS source_table,
@@ -477,7 +480,7 @@ WITH CSV HEADER;
 
 SELECT * FROM compare_results;
 
-req-8
+REQ-8:CREATE TEST PLAN WITH ALL KINDS OF MANUAL TEST CASES IN ORDER TO TEST THE END TO END FUNCTIONALITY
 -- Step 1: Create Test Plan Table
 CREATE TABLE test_plan (
     test_id SERIAL PRIMARY KEY,
@@ -573,7 +576,7 @@ VALUES
 -- Step 3: Query the Test Plan
 SELECT * FROM test_plan ORDER BY test_id;
 
-req-9:
+REQ-9:AUTOMATE THE TEST CASES USING ANY METHOD BUT SHOULD BE AUTOMATED
 CREATE TABLE IF NOT EXISTS test_plan (
     test_id SERIAL PRIMARY KEY,
     test_type VARCHAR(50),
